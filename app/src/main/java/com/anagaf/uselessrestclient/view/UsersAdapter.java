@@ -2,7 +2,6 @@ package com.anagaf.uselessrestclient.view;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -35,16 +34,15 @@ final class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        final int count = users.size();
-        return count;
+        return users.size();
     }
 
     /* ========== Inner Classes ========== */
 
     static final class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView nameTextView;
-        private TextView emailTextView;
+        private final TextView nameTextView;
+        private final TextView emailTextView;
 
         ViewHolder(final CardView cardView) {
             super(cardView);

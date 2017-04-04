@@ -1,4 +1,4 @@
-package com.anagaf.uselessrestclient.api;
+package com.anagaf.uselessrestclient.service;
 
 import com.anagaf.uselessrestclient.model.User;
 

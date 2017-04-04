@@ -1,4 +1,4 @@
-package com.anagaf.uselessrestclient.api;
+package com.anagaf.uselessrestclient.service;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

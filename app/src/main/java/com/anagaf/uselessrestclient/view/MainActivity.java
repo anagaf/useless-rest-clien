@@ -1,13 +1,17 @@
 package com.anagaf.uselessrestclient.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.anagaf.uselessrestclient.R;
-import com.anagaf.uselessrestclient.api.DefaultJsonPlaceholderService;
+import com.anagaf.uselessrestclient.service.DefaultJsonPlaceholderService;
 import com.anagaf.uselessrestclient.model.User;
 import com.anagaf.uselessrestclient.presenter.Presenter;
 
@@ -16,6 +20,10 @@ import java.util.List;
 public class MainActivity extends Activity implements Presenter.Listener {
 
     private Presenter presenter;
+
+    private ProgressBar progressBar;
+
+    private TextView errorMessageTextView;
 
     private RecyclerView recyclerView;
 
@@ -26,6 +34,10 @@ public class MainActivity extends Activity implements Presenter.Listener {
 
         presenter = new Presenter(this, new DefaultJsonPlaceholderService());
 
+        progressBar = (ProgressBar) findViewById(R.id.progress);
+
+        errorMessageTextView = (TextView) findViewById(R.id.error_message);
+
         recyclerView = (RecyclerView) findViewById(R.id.users);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -33,17 +45,44 @@ public class MainActivity extends Activity implements Presenter.Listener {
     @Override
     protected void onStart() {
         super.onStart();
+        progressBar.setAlpha(1);
+        progressBar.setVisibility(View.VISIBLE);
         presenter.retreiveUsers();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        recyclerView.setVisibility(View.GONE);
     }
 
     @Override
     public void onUsersAvailable(final List<User> users) {
         recyclerView.setAdapter(new UsersAdapter(users));
-        recyclerView.getAdapter().notifyDataSetChanged();
+        animateCrossfade(recyclerView);
     }
 
     @Override
     public void onError(final String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        errorMessageTextView.setText(message);
+        animateCrossfade(errorMessageTextView);
+    }
+
+    private void animateCrossfade(View destinationView) {
+        destinationView.setAlpha(0f);
+        destinationView.setVisibility(View.VISIBLE);
+
+        destinationView.animate()
+                .alpha(1f)
+                .setListener(null);
+
+        progressBar.animate()
+                .alpha(0f)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
     }
 }

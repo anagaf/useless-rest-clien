@@ -1,10 +1,9 @@
 package com.anagaf.uselessrestclient.presenter;
 
-import com.anagaf.uselessrestclient.api.JsonPlaceholderService;
+import com.anagaf.uselessrestclient.service.JsonPlaceholderService;
 import com.anagaf.uselessrestclient.model.User;
 
 import java.lang.ref.WeakReference;
-import java.util.Collection;
 import java.util.List;
 
 import retrofit2.Call;
