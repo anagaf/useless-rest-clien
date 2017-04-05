@@ -53,7 +53,7 @@ public class PresenterTest {
 
         countDownLatch = new CountDownLatch(1);
 
-        presenter.retreiveUsers();
+        presenter.retrieveUsers();
 
         countDownLatch.await(3, TimeUnit.SECONDS);
 
@@ -68,7 +68,7 @@ public class PresenterTest {
 
         countDownLatch = new CountDownLatch(1);
 
-        presenter.retreiveUsers();
+        presenter.retrieveUsers();
 
         countDownLatch.await(3, TimeUnit.SECONDS);
 
@@ -81,7 +81,7 @@ public class PresenterTest {
 
         countDownLatch = new CountDownLatch(1);
 
-        presenter.retreiveUsers();
+        presenter.retrieveUsers();
 
         countDownLatch.await(3, TimeUnit.SECONDS);
 

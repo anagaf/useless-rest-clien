@@ -11,15 +11,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.anagaf.uselessrestclient.R;
+import com.anagaf.uselessrestclient.di.DaggerWrapper;
 import com.anagaf.uselessrestclient.model.User;
 import com.anagaf.uselessrestclient.presenter.Presenter;
 import com.anagaf.uselessrestclient.service.ProductionJsonPlaceholderService;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class MainActivity extends Activity implements Presenter.Listener {
 
-    private Presenter presenter;
+    @Inject
+    Presenter presenter;
 
     private ProgressBar progressBar;
 
@@ -32,7 +36,7 @@ public class MainActivity extends Activity implements Presenter.Listener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        presenter = new Presenter(this, new ProductionJsonPlaceholderService());
+        DaggerWrapper.INSTANCE.getComponent().inject(this);
 
         progressBar = (ProgressBar) findViewById(R.id.progress);
 
@@ -45,14 +49,20 @@ public class MainActivity extends Activity implements Presenter.Listener {
     @Override
     protected void onStart() {
         super.onStart();
+
+        presenter.start(this);
+
         progressBar.setAlpha(1);
         progressBar.setVisibility(View.VISIBLE);
-        presenter.retreiveUsers();
+        presenter.retrieveUsers();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+
+        presenter.stop();
+
         recyclerView.setVisibility(View.GONE);
     }
 
