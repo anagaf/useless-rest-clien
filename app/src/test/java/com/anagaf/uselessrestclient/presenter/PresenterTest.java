@@ -37,12 +37,14 @@ public class PresenterTest {
 
         final TestService service = new TestService(webServer.url("").toString());
 
-        presenter = new Presenter(listener, service);
+        presenter = new DefaultPresenter(service);
+        presenter.start(listener);
     }
 
     @After
     public void tearDown() throws Exception {
         webServer.shutdown();
+        presenter.stop();
     }
 
     @Test
