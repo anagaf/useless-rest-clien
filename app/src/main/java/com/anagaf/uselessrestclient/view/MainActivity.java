@@ -11,9 +11,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.anagaf.uselessrestclient.R;
-import com.anagaf.uselessrestclient.service.DefaultJsonPlaceholderService;
 import com.anagaf.uselessrestclient.model.User;
 import com.anagaf.uselessrestclient.presenter.Presenter;
+import com.anagaf.uselessrestclient.service.ProductionJsonPlaceholderService;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class MainActivity extends Activity implements Presenter.Listener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        presenter = new Presenter(this, new DefaultJsonPlaceholderService());
+        presenter = new Presenter(this, new ProductionJsonPlaceholderService());
 
         progressBar = (ProgressBar) findViewById(R.id.progress);
 
