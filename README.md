@@ -1,0 +1,1 @@
+Yet another Android REST client sample
