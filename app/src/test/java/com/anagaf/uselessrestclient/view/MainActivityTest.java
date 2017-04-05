@@ -1,8 +1,8 @@
 package com.anagaf.uselessrestclient.view;
 
 import com.anagaf.uselessrestclient.BuildConfig;
-import com.anagaf.uselessrestclient.di.DaggerModule;
-import com.anagaf.uselessrestclient.di.DaggerWrapper;
+import com.anagaf.uselessrestclient.dagger.DaggerModule;
+import com.anagaf.uselessrestclient.dagger.DaggerWrapper;
 import com.anagaf.uselessrestclient.presenter.Presenter;
 
 import org.junit.Test;
@@ -14,6 +14,9 @@ import org.robolectric.annotation.Config;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+/**
+ * WARNING: if this test fails on Mac check "Note for Linux and Mac Users" at http://robolectric.org/getting-started/
+ */
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class MainActivityTest {
@@ -29,7 +32,7 @@ public class MainActivityTest {
             }
         });
 
-        Robolectric.buildActivity(MainActivity.class).create().start();
+        Robolectric.buildActivity(MainActivity.class).create().start().get();
 
         verify(presenter).retrieveUsers();
     }

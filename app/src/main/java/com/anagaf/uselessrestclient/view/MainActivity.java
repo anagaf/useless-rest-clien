@@ -11,10 +11,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.anagaf.uselessrestclient.R;
-import com.anagaf.uselessrestclient.di.DaggerWrapper;
+import com.anagaf.uselessrestclient.dagger.DaggerWrapper;
 import com.anagaf.uselessrestclient.model.User;
 import com.anagaf.uselessrestclient.presenter.Presenter;
-import com.anagaf.uselessrestclient.service.ProductionJsonPlaceholderService;
 
 import java.util.List;
 
@@ -23,6 +22,7 @@ import javax.inject.Inject;
 public class MainActivity extends Activity implements Presenter.Listener {
 
     @Inject
+    @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
     Presenter presenter;
 
     private ProgressBar progressBar;

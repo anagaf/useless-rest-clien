@@ -3,8 +3,8 @@ package com.anagaf.uselessrestclient.view;
 import android.support.test.rule.ActivityTestRule;
 
 import com.anagaf.uselessrestclient.R;
-import com.anagaf.uselessrestclient.di.DaggerModule;
-import com.anagaf.uselessrestclient.di.DaggerWrapper;
+import com.anagaf.uselessrestclient.dagger.DaggerModule;
+import com.anagaf.uselessrestclient.dagger.DaggerWrapper;
 import com.anagaf.uselessrestclient.model.User;
 import com.anagaf.uselessrestclient.presenter.Presenter;
 import com.google.gson.Gson;
@@ -31,7 +31,7 @@ public class MainActivityAndroidTest {
     private Presenter presenter;
 
     @Rule
-    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class, false, false);
+    public final ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Before
     public void setUp() throws Exception {

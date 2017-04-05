@@ -1,4 +1,4 @@
-package com.anagaf.uselessrestclient.di;
+package com.anagaf.uselessrestclient.dagger;
 
 import com.anagaf.uselessrestclient.presenter.DefaultPresenter;
 import com.anagaf.uselessrestclient.presenter.Presenter;

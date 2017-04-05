@@ -49,5 +49,4 @@ public class DefaultPresenter implements Presenter{
             }
         });
     }
-
 }

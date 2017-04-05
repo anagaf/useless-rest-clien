@@ -1,4 +1,4 @@
-package com.anagaf.uselessrestclient.di;
+package com.anagaf.uselessrestclient.dagger;
 
 public enum DaggerWrapper {
     INSTANCE;
