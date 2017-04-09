@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -43,24 +44,25 @@ public class MainActivity extends Activity implements Presenter.View {
 
         recyclerView = (RecyclerView) findViewById(R.id.users);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        findViewById(R.id.retrieve_users).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                presenter.retrieveUsers();
+            }
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         presenter.start(this);
-
-        presenter.retrieveUsers();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
         presenter.stop();
-
-        recyclerView.setVisibility(android.view.View.GONE);
     }
 
     @Override
