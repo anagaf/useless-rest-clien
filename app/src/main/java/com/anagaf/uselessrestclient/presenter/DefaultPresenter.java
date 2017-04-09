@@ -29,6 +29,7 @@ public class DefaultPresenter implements Presenter {
 
     @Override
     public void retrieveUsers() {
+        view.showProgressBar();
         service.getApi().getUsers().enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(final Call<List<User>> call, final Response<List<User>> response) {

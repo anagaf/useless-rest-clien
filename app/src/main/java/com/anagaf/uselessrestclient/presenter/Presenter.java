@@ -15,6 +15,8 @@ public interface Presenter {
     /* ========== Inner Classes ========== */
 
     interface View {
+        void showProgressBar();
+
         void showUsers(List<User> users);
 
         void showError(String message);

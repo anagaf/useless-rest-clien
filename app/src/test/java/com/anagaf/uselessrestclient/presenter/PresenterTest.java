@@ -97,6 +97,11 @@ public class PresenterTest {
         String errorMessage;
 
         @Override
+        public void showProgressBar() {
+
+        }
+
+        @Override
         public void showUsers(final List<User> users) {
             this.users = users;
             countDownLatch.countDown();

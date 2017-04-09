@@ -51,8 +51,6 @@ public class MainActivity extends Activity implements Presenter.View {
 
         presenter.start(this);
 
-        progressBar.setAlpha(1);
-        progressBar.setVisibility(android.view.View.VISIBLE);
         presenter.retrieveUsers();
     }
 
@@ -63,6 +61,12 @@ public class MainActivity extends Activity implements Presenter.View {
         presenter.stop();
 
         recyclerView.setVisibility(android.view.View.GONE);
+    }
+
+    @Override
+    public void showProgressBar() {
+        progressBar.setAlpha(1);
+        progressBar.setVisibility(android.view.View.VISIBLE);
     }
 
     @Override
