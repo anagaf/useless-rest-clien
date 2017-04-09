@@ -57,7 +57,7 @@ public class MainActivityAndroidTest {
         activityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                activityRule.getActivity().onUsersAvailable(users);
+                activityRule.getActivity().showUsers(users);
             }
         });
 
@@ -74,7 +74,7 @@ public class MainActivityAndroidTest {
         activityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                activityRule.getActivity().onError(errorMessage);
+                activityRule.getActivity().showError(errorMessage);
             }
         });
 

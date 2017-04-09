@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,7 +18,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class MainActivity extends Activity implements Presenter.Listener {
+public class MainActivity extends Activity implements Presenter.View {
 
     @Inject
     @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
@@ -53,7 +52,7 @@ public class MainActivity extends Activity implements Presenter.Listener {
         presenter.start(this);
 
         progressBar.setAlpha(1);
-        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(android.view.View.VISIBLE);
         presenter.retrieveUsers();
     }
 
@@ -63,24 +62,24 @@ public class MainActivity extends Activity implements Presenter.Listener {
 
         presenter.stop();
 
-        recyclerView.setVisibility(View.GONE);
+        recyclerView.setVisibility(android.view.View.GONE);
     }
 
     @Override
-    public void onUsersAvailable(final List<User> users) {
+    public void showUsers(final List<User> users) {
         recyclerView.setAdapter(new UsersAdapter(users));
         animateCrossfade(recyclerView);
     }
 
     @Override
-    public void onError(final String message) {
+    public void showError(final String message) {
         errorMessageTextView.setText(message);
         animateCrossfade(errorMessageTextView);
     }
 
-    private void animateCrossfade(View destinationView) {
+    private void animateCrossfade(android.view.View destinationView) {
         destinationView.setAlpha(0f);
-        destinationView.setVisibility(View.VISIBLE);
+        destinationView.setVisibility(android.view.View.VISIBLE);
 
         destinationView.animate()
                 .alpha(1f)
@@ -91,7 +90,7 @@ public class MainActivity extends Activity implements Presenter.Listener {
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        progressBar.setVisibility(View.GONE);
+                        progressBar.setVisibility(android.view.View.GONE);
                     }
                 });
     }

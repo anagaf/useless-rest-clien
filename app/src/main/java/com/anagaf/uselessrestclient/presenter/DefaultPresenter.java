@@ -9,9 +9,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DefaultPresenter implements Presenter{
+public class DefaultPresenter implements Presenter {
 
-    private Listener listener;
+    private View view;
 
     private final JsonPlaceholderService service;
 
@@ -19,12 +19,12 @@ public class DefaultPresenter implements Presenter{
         this.service = service;
     }
 
-    public void start(final Listener listener) {
-        this.listener = listener;
+    public void start(final View view) {
+        this.view = view;
     }
 
     public void stop() {
-        this.listener = null;
+        this.view = null;
     }
 
     @Override
@@ -32,19 +32,19 @@ public class DefaultPresenter implements Presenter{
         service.getApi().getUsers().enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(final Call<List<User>> call, final Response<List<User>> response) {
-                if (listener != null) {
+                if (view != null) {
                     if (response.isSuccessful()) {
-                        listener.onUsersAvailable(response.body());
+                        view.showUsers(response.body());
                     } else {
-                        listener.onError("Unable to retrieve users (response code " + response.code() + ")");
+                        view.showError("Unable to retrieve users (response code " + response.code() + ")");
                     }
                 }
             }
 
             @Override
             public void onFailure(final Call<List<User>> call, final Throwable t) {
-                if (listener != null) {
-                    listener.onError(t.getMessage());
+                if (view != null) {
+                    view.showError(t.getMessage());
                 }
             }
         });

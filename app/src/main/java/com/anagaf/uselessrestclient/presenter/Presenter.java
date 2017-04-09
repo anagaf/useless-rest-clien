@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface Presenter {
 
-    void start(final Listener listener);
+    void start(final View view);
 
     void stop();
 
@@ -14,9 +14,9 @@ public interface Presenter {
 
     /* ========== Inner Classes ========== */
 
-    interface Listener {
-        void onUsersAvailable(List<User> users);
+    interface View {
+        void showUsers(List<User> users);
 
-        void onError(String message);
+        void showError(String message);
     }
 }

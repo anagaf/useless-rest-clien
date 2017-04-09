@@ -25,7 +25,7 @@ public class PresenterTest {
 
     private Presenter presenter;
 
-    private TestListener listener;
+    private TestView listener;
 
     private CountDownLatch countDownLatch;
 
@@ -33,7 +33,7 @@ public class PresenterTest {
     public void setUp() throws Exception {
         webServer.start();
 
-        listener = new TestListener();
+        listener = new TestView();
 
         final TestService service = new TestService(webServer.url("").toString());
 
@@ -92,18 +92,18 @@ public class PresenterTest {
 
     /* ========== Inner Classes ========== */
 
-    private final class TestListener implements Presenter.Listener {
+    private final class TestView implements Presenter.View {
         List<User> users;
         String errorMessage;
 
         @Override
-        public void onUsersAvailable(final List<User> users) {
+        public void showUsers(final List<User> users) {
             this.users = users;
             countDownLatch.countDown();
         }
 
         @Override
-        public void onError(final String message) {
+        public void showError(final String message) {
             this.errorMessage = message;
             countDownLatch.countDown();
         }
