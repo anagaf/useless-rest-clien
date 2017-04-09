@@ -1,14 +1,8 @@
 package com.anagaf.uselessrestclient.view;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.anagaf.uselessrestclient.R;
 import com.anagaf.uselessrestclient.dagger.DaggerWrapper;
@@ -25,25 +19,12 @@ public class MainActivity extends Activity implements Presenter.View {
     @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
     Presenter presenter;
 
-    private ProgressBar progressBar;
-
-    private TextView errorMessageTextView;
-
-    private RecyclerView recyclerView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         DaggerWrapper.INSTANCE.getComponent().inject(this);
-
-        progressBar = (ProgressBar) findViewById(R.id.progress);
-
-        errorMessageTextView = (TextView) findViewById(R.id.error_message);
-
-        recyclerView = (RecyclerView) findViewById(R.id.users);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         findViewById(R.id.retrieve_users).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,37 +48,22 @@ public class MainActivity extends Activity implements Presenter.View {
 
     @Override
     public void showProgressBar() {
-        progressBar.setAlpha(1);
-        progressBar.setVisibility(android.view.View.VISIBLE);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_container, new ProgressFragment())
+                .commit();
     }
 
     @Override
     public void showUsers(final List<User> users) {
-        recyclerView.setAdapter(new UsersAdapter(users));
-        animateCrossfade(recyclerView);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_container, UsersFragment.createFragment(users))
+                .commit();
     }
 
     @Override
     public void showError(final String message) {
-        errorMessageTextView.setText(message);
-        animateCrossfade(errorMessageTextView);
-    }
-
-    private void animateCrossfade(android.view.View destinationView) {
-        destinationView.setAlpha(0f);
-        destinationView.setVisibility(android.view.View.VISIBLE);
-
-        destinationView.animate()
-                .alpha(1f)
-                .setListener(null);
-
-        progressBar.animate()
-                .alpha(0f)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        progressBar.setVisibility(android.view.View.GONE);
-                    }
-                });
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_container, ErrorFragment.createFragment(message))
+                .commit();
     }
 }

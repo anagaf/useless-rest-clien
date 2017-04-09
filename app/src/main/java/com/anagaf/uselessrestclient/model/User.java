@@ -1,7 +1,9 @@
 package com.anagaf.uselessrestclient.model;
 
-@SuppressWarnings({"CanBeFinal","unused"})
-public class User {
+import java.io.Serializable;
+
+@SuppressWarnings({"CanBeFinal", "unused"})
+public class User implements Serializable {
     private String name;
 
     private String email;
