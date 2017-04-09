@@ -21,6 +21,6 @@
         android:id="@+id/retrieve_users"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Retrieve Users"/>
+        android:text="@string/retrieve_users"/>
 
 </LinearLayout>

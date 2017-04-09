@@ -19,12 +19,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class MainActivityAndroidTest {
 
@@ -41,14 +43,27 @@ public class MainActivityAndroidTest {
     }
 
     @Test
-    public void shouldDisplayProgressBar() {
-//        onView(withId(R.id.progress)).check(matches(isDisplayed()));
-//        onView(withId(R.id.error_message)).check(matches(not(isDisplayed())));
-//        onView(withId(R.id.users)).check(matches(not(isDisplayed())));
+    public void shouldRetrieveUsers() {
+        onView(withId(R.id.retrieve_users)).perform(click());
+        verify(presenter).retrieveUsers();
     }
 
     @Test
-    public void shouldDisplayUsers() throws JSONException {
+    public void shouldShowProgressBar() {
+        activityRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                activityRule.getActivity().showProgressBar();
+            }
+        });
+
+        onView(withId(R.id.progress)).check(matches(isDisplayed()));
+        onView(withId(R.id.error)).check(doesNotExist());
+        onView(withId(R.id.users)).check(doesNotExist());
+    }
+
+    @Test
+    public void shouldShowUsers() throws JSONException {
         final List<User> users = Arrays.asList(
                 createUser("name1", "email1"),
                 createUser("name2", "email2")
@@ -68,7 +83,7 @@ public class MainActivityAndroidTest {
     }
 
     @Test
-    public void shouldDisplayErrorMessage() {
+    public void shouldShowError() {
         final String errorMessage = "error";
 
         activityRule.getActivity().runOnUiThread(new Runnable() {

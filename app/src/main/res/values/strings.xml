@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">UselessRestClient</string>
+    <string name="retrieve_users">Retrieve Users</string>
 </resources>
