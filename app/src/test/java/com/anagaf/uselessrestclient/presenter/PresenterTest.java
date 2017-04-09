@@ -7,6 +7,9 @@ import com.anagaf.uselessrestclient.service.AbstractJsonPlaceholderService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -18,14 +21,18 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class PresenterTest {
     private final MockWebServer webServer = new MockWebServer();
 
     private Presenter presenter;
 
-    private TestView listener;
+    private Presenter.View view;
 
     private CountDownLatch countDownLatch;
 
@@ -33,12 +40,21 @@ public class PresenterTest {
     public void setUp() throws Exception {
         webServer.start();
 
-        listener = new TestView();
+        view = mock(Presenter.View.class);
+        final Answer countDownAnswer = new Answer() {
+            @Override
+            public Object answer(final InvocationOnMock invocation) throws Throwable {
+                countDownLatch.countDown();
+                return null;
+            }
+        };
+        doAnswer(countDownAnswer).when(view).showError(anyString());
+        doAnswer(countDownAnswer).when(view).showUsers(any(List.class));
 
         final TestService service = new TestService(webServer.url("").toString());
 
         presenter = new DefaultPresenter(service);
-        presenter.start(listener);
+        presenter.start(view);
     }
 
     @After
@@ -59,9 +75,13 @@ public class PresenterTest {
 
         countDownLatch.await(3, TimeUnit.SECONDS);
 
-        assertEquals(10, listener.users.size());
-        assertEquals("Leanne Graham", listener.users.get(0).getName());
-        assertEquals("Rey.Padberg@karina.biz", listener.users.get(9).getEmail());
+        verify(view).showProgressBar();
+        final ArgumentCaptor<List> usersArg = ArgumentCaptor.forClass(List.class);
+        verify(view).showUsers(usersArg.capture());
+        final List<User> users = usersArg.getValue();
+        assertEquals(10, users.size());
+        assertEquals("Leanne Graham", users.get(0).getName());
+        assertEquals("Rey.Padberg@karina.biz", users.get(9).getEmail());
     }
 
     @Test
@@ -74,7 +94,8 @@ public class PresenterTest {
 
         countDownLatch.await(3, TimeUnit.SECONDS);
 
-        assertNotNull(listener.errorMessage);
+        verify(view).showProgressBar();
+        verify(view).showError(anyString());
     }
 
     @Test
@@ -87,32 +108,11 @@ public class PresenterTest {
 
         countDownLatch.await(3, TimeUnit.SECONDS);
 
-        assertNotNull(listener.errorMessage);
+        verify(view).showProgressBar();
+        verify(view).showError(anyString());
     }
 
     /* ========== Inner Classes ========== */
-
-    private final class TestView implements Presenter.View {
-        List<User> users;
-        String errorMessage;
-
-        @Override
-        public void showProgressBar() {
-
-        }
-
-        @Override
-        public void showUsers(final List<User> users) {
-            this.users = users;
-            countDownLatch.countDown();
-        }
-
-        @Override
-        public void showError(final String message) {
-            this.errorMessage = message;
-            countDownLatch.countDown();
-        }
-    }
 
     private final static class TestService extends AbstractJsonPlaceholderService {
 
