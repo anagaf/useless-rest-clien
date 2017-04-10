@@ -2,7 +2,7 @@ package com.anagaf.uselessrestclient.presenter;
 
 import com.anagaf.uselessrestclient.TestUtils;
 import com.anagaf.uselessrestclient.model.User;
-import com.anagaf.uselessrestclient.service.AbstractJsonPlaceholderService;
+import com.anagaf.uselessrestclient.service.JsonPlaceholderService;
 
 import org.junit.After;
 import org.junit.Before;
@@ -51,9 +51,10 @@ public class PresenterTest {
         doAnswer(countDownAnswer).when(view).showError(anyString());
         doAnswer(countDownAnswer).when(view).showUsers(any(List.class));
 
-        final TestService service = new TestService(webServer.url("").toString());
+        final JsonPlaceholderService service = new JsonPlaceholderService();
+        service.setHost(webServer.url("").toString());
 
-        presenter = new DefaultPresenter(service);
+        presenter = new Presenter(service);
         presenter.start(view);
     }
 
@@ -110,21 +111,5 @@ public class PresenterTest {
 
         verify(view).showProgressBar();
         verify(view).showError(anyString());
-    }
-
-    /* ========== Inner Classes ========== */
-
-    private final static class TestService extends AbstractJsonPlaceholderService {
-
-        private final String host;
-
-        TestService(final String hostName) {
-            this.host = hostName;
-        }
-
-        @Override
-        protected String getHost() {
-            return this.host;
-        }
     }
 }
