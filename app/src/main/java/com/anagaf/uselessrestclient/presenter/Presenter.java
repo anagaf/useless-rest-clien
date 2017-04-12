@@ -30,24 +30,13 @@ public class Presenter {
         view.showProgressBar();
         service.getApi().getUsers()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new DefaultObserver<List<User>>() {
-                    @Override
-                    public void onNext(final List<User> value) {
-                        if (view != null) {
-                            view.showUsers(value);
-                        }
+                .subscribe(users -> {
+                    if (view != null) {
+                        view.showUsers(users);
                     }
-
-                    @Override
-                    public void onError(final Throwable e) {
-                        if (view != null) {
-                            view.showError("Unable to retrieve users: " + e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        // do nothing
+                }, error -> {
+                    if (view != null) {
+                        view.showError("Unable to retrieve users: " + error.getMessage());
                     }
                 });
     }
