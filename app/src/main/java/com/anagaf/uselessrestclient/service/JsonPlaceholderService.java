@@ -5,8 +5,9 @@ import com.google.common.annotations.VisibleForTesting;
 
 import java.util.List;
 
-import retrofit2.Call;
+import io.reactivex.Observable;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 
@@ -17,6 +18,7 @@ public class JsonPlaceholderService {
     public Api getApi() {
         final Retrofit retrofit = new Retrofit
                 .Builder()
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(host)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -32,6 +34,6 @@ public class JsonPlaceholderService {
 
     public interface Api {
         @GET("users")
-        Call<List<User>> getUsers();
+        Observable<List<User>> getUsers();
     }
 }

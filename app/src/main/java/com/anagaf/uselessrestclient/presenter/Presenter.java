@@ -5,9 +5,8 @@ import com.anagaf.uselessrestclient.service.JsonPlaceholderService;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.observers.DefaultObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class Presenter {
 
@@ -29,25 +28,28 @@ public class Presenter {
 
     public void retrieveUsers() {
         view.showProgressBar();
-        service.getApi().getUsers().enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(final Call<List<User>> call, final Response<List<User>> response) {
-                if (view != null) {
-                    if (response.isSuccessful()) {
-                        view.showUsers(response.body());
-                    } else {
-                        view.showError("Unable to retrieve users (response code " + response.code() + ")");
+        service.getApi().getUsers()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new DefaultObserver<List<User>>() {
+                    @Override
+                    public void onNext(final List<User> value) {
+                        if (view != null) {
+                            view.showUsers(value);
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void onFailure(final Call<List<User>> call, final Throwable t) {
-                if (view != null) {
-                    view.showError(t.getMessage());
-                }
-            }
-        });
+                    @Override
+                    public void onError(final Throwable e) {
+                        if (view != null) {
+                            view.showError("Unable to retrieve users: " + e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        // do nothing
+                    }
+                });
     }
 
     /* ========== Inner Classes ========== */
